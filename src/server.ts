@@ -6,6 +6,7 @@ const app = express();
 
 app.use(express.json())
 
-app.use("/users", usersRoutes);
+app.use("/register", usersRoutes);
+app.use("/search", usersRoutes);
 
 app.listen(3333, () => console.log("Running"));

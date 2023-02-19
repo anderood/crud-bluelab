@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 import { isCPF, isPhone } from "brazilian-values";
 
 const usersRoutes = Router();
+const usersRoutesx = Router();
 
 const accounts = [];
 
@@ -40,6 +41,19 @@ usersRoutes.post("/", (request, response) => {
 
 
 });
+
+usersRoutes.get("/", (request, response ) => {
+
+    const { cpf } = request.body;
+
+    const user = accounts.filter(user => user.cpf === cpf);
+
+    if(user.length > 0){
+        return response.status(200).send({ "success": true, dataUser: user})
+    }
+
+    return response.status(400).send({ "success": false, "msg": "Informações de CPF não armazenadas"})
+})
 
 
 export { usersRoutes };
