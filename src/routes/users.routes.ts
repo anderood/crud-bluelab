@@ -34,6 +34,8 @@ usersRoutes.post("/", (request, response) => {
         updated_at: new Date()
     }
 
+    accounts.push(newUser);
+
     return response.status(201).send({ "success": true, "msg": "Cadastro Realizado com Sucesso!"})
 
 
