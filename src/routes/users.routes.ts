@@ -48,7 +48,7 @@ usersRoutes.get("/", (request, response ) => {
 
     const user = accounts.filter(user => user.cpf === cpf);
 
-    if(user.length > 0){
+    if(!!user.length){
         return response.status(200).send({ "success": true, dataUser: user})
     }
 
