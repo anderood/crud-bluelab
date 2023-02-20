@@ -3,11 +3,10 @@ import { v4 } from "uuid";
 import { isCPF, isPhone } from "brazilian-values";
 
 const usersRoutes = Router();
-const usersRoutesx = Router();
 
 const accounts = [];
 
-usersRoutes.post("/", (request, response) => {
+usersRoutes.post("/register", (request, response) => {
 
     const { first_name, last_name, phone, cpf } = request.body;
 
@@ -25,7 +24,7 @@ usersRoutes.post("/", (request, response) => {
         return response.status(400).send({ "success": false, "msg": "Telefone invalido"})
     }
 
-    const newUser = {
+    accounts.push({
         id: v4(),
         first_name,
         last_name,
@@ -33,16 +32,12 @@ usersRoutes.post("/", (request, response) => {
         cpf,
         created_at: new Date(),
         updated_at: new Date()
-    }
-
-    accounts.push(newUser);
+    });
 
     return response.status(201).send({ "success": true, "msg": "Cadastro Realizado com Sucesso!"})
-
-
 });
 
-usersRoutes.get("/", (request, response ) => {
+usersRoutes.get("/search", (request, response ) => {
 
     const { cpf } = request.body;
 
@@ -53,7 +48,26 @@ usersRoutes.get("/", (request, response ) => {
     }
 
     return response.status(400).send({ "success": false, "msg": "Informações de CPF não armazenadas"})
-})
+});
+
+usersRoutes.put("/user/:id", (request, response) => {
+
+    const { id } = request.params;
+    const { first_name, last_name, phone } = request.body;
+
+    const userUpdate = accounts.find(item => item.id === id);
+    
+    if(!userUpdate){
+        return response.status(400).send({success: false, msg: "Usuario não encontrado"})
+    }
+
+    userUpdate.first_name = first_name
+    userUpdate.last_name = last_name
+    userUpdate.phone = phone
+     
+
+    return response.status(201).send({ "success": true, dataUser: userUpdate})
+});
 
 
 export { usersRoutes };
