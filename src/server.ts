@@ -7,7 +7,5 @@ const app = express();
 app.use(express.json())
 
 app.use("/", usersRoutes);
-app.use("/", usersRoutes);
-app.use("/", usersRoutes);
 
 app.listen(3333, () => console.log("Running"));

@@ -69,5 +69,22 @@ usersRoutes.put("/user/:id", (request, response) => {
     return response.status(201).send({ "success": true, dataUser: userUpdate})
 });
 
+usersRoutes.delete("/user/:id", (request, response) => {
+
+
+    const { id } = request.params;
+
+    const findIndex = accounts.findIndex(item => item.id === id);
+
+    if(findIndex === -1){
+        return response.status(400).send({success: false, msg: "Usuario não encontrado"})
+    }
+
+    accounts.splice(findIndex);
+
+    return response.status(204).send();
+
+})
+
 
 export { usersRoutes };
