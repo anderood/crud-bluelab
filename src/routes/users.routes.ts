@@ -66,7 +66,7 @@ usersRoutes.put("/user/:id", (request, response) => {
     userUpdate.phone = phone
      
 
-    return response.status(201).json({ "success": true, dataUser: userUpdate})
+    return response.status(201).json({ "success": true, "msg": "Cadastro Atualizado", data: userUpdate})
 });
 
 usersRoutes.delete("/user/:id", (request, response) => {
