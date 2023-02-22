@@ -39,8 +39,8 @@ usersRoutes.post("/register", (request, response) => {
 
 usersRoutes.get("/search", (request, response ) => {
 
-    const { cpf } = request.body;
-
+    const { cpf } = request.query;
+    
     const user = accounts.filter(user => user.cpf === cpf);
 
     if(!!user.length){
