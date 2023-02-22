@@ -77,7 +77,7 @@ usersRoutes.delete("/user/:id", (request, response) => {
     const findIndex = accounts.findIndex(item => item.id === id);
 
     if(findIndex === -1){
-        return response.status(400).json({success: false, msg: "Usuario não encontrado"})
+        return response.status(400).json({"success": false, "msg": "Usuario não encontrado"})
     }
 
     accounts.splice(findIndex);
