@@ -1,20 +1,28 @@
 import { Router } from "express";
 import { v4 } from "uuid";
 import { isCPF, isPhone } from "brazilian-values";
+import path from "path";
 
 const usersRoutes = Router();
 
-const accounts = [];
+export const accounts = [];
 
-usersRoutes.post("/register", (request, response) => {
+function verifyAccount(request, response, next){
 
-    const { first_name, last_name, phone, cpf } = request.body;
+    const { cpf } = request.body;
 
     const checkUser = accounts.some( user => user.cpf === cpf);
 
     if(checkUser){
         return response.status(400).json({ "success": false, "msg": "CPF Já Cadastrado!"})
     }
+
+    return next();
+}
+
+function verifyInfo(request, response, next){
+
+    const { phone, cpf } = request.body;
 
     if(!isCPF(cpf)){
         return response.status(400).json({ "success": false, "msg": "CPF invalido"})
@@ -23,6 +31,13 @@ usersRoutes.post("/register", (request, response) => {
     if(!isPhone(phone)){
         return response.status(400).json({ "success": false, "msg": "Telefone invalido"})
     }
+
+    return next();
+}
+
+usersRoutes.post("/register", verifyAccount, verifyInfo, (request, response) => {
+
+    const { first_name, last_name, phone, cpf } = request.body;
 
     accounts.push({
         id: v4(),
@@ -40,7 +55,7 @@ usersRoutes.post("/register", (request, response) => {
 usersRoutes.get("/search", (request, response ) => {
 
     const { cpf } = request.query;
-    
+
     const user = accounts.filter(user => user.cpf === cpf);
 
     if(!!user.length){
@@ -50,7 +65,7 @@ usersRoutes.get("/search", (request, response ) => {
     return response.status(400).json({ "success": false, "msg": "Informações de CPF não armazenadas"})
 });
 
-usersRoutes.put("/user/:id", (request, response) => {
+usersRoutes.put("/user/:id", verifyInfo, (request, response) => {
 
     const { id } = request.params;
     const { first_name, last_name, phone } = request.body;
@@ -90,5 +105,8 @@ usersRoutes.get("/users", (request, response) => {
     return response.status(200).json(accounts);
 })
 
+usersRoutes.get("/chat", (request, response)=> {
+    return response.sendFile(path.resolve("./public/index.html"))
+})
 
 export { usersRoutes };
