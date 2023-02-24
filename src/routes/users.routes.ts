@@ -59,7 +59,7 @@ usersRoutes.get("/search", (request, response ) => {
     const user = accounts.filter(user => user.cpf === cpf);
 
     if(!!user.length){
-        return response.status(200).json({ "success": true, dataUser: user})
+        return response.status(200).json({ "success": true, user})
     }
 
     return response.status(400).json({ "success": false, "msg": "Informações de CPF não armazenadas"})
@@ -103,10 +103,6 @@ usersRoutes.delete("/user/:id", (request, response) => {
 
 usersRoutes.get("/users", (request, response) => {
     return response.status(200).json(accounts);
-})
-
-usersRoutes.get("/chat", (request, response)=> {
-    return response.sendFile(path.resolve("./public/index.html"))
 })
 
 export { usersRoutes };
