@@ -1,9 +1,22 @@
 import { io } from "./http";
-import { accounts } from "./routes/users.routes";
+
+const messages = [];
 
 io.on("connection", (socket) => {
 
-    socket.on("message", (msg) => {
-        console.log(msg)
-    })
+   socket.on('chat-private', (data) => {
+
+        const message = {
+            id: data.id,
+            room: data.room,
+            textmsg: data.textmsg,
+            createdAt: new Date()
+        }
+
+        messages.push(message);
+
+        socket.to(data.room).emit('chat-private', messages)
+        console.log(messages);
+   })
+
 })
