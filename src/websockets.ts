@@ -1,15 +1,15 @@
 import { io } from "./http";
 import { accounts } from "./routes/users.routes";
 
+const messages = []
+
 io.on('connection', (socket) => {
    console.log('a user connected');
+
+  socket.on('chat', (data)=> {
+
+    messages.push(data);
+    socket.broadcast.emit('chatx', messages)
+  })
  
-   socket.on('chat-private', (messagex: string) => {
-     console.log('message:', messagex);
-     io.emit('chat-private', messagex);
-   });
- 
-   socket.on('disconnect', () => {
-     console.log('user disconnected');
-   });
  });
